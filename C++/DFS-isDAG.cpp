@@ -48,6 +48,17 @@ int main()
       // adj[v].push_back(u);
       s=u;
    }
-   // check all connected components;
-   puts(isDAG(s) ? "DAG":"NOT DAG");
+   // checking all nodes
+   for(int u=1 ; u <= n ; u++)
+   {
+      if(vis[u] == NOT_VISITED)
+      {
+         if(!isDAG(u))
+         {
+            puts("not DAG")
+            ;return;
+         }
+      }
+   }
+   puts("DAG");
 }
