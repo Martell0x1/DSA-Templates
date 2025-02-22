@@ -5,6 +5,7 @@ using namespace std;
 #define FastIO ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
 
 typedef long long ll;
+
 const int N = 1e3 + 5, M = 1e3 + 5, OO = 0x3f3f3f3f;
 
 int n, m;
@@ -12,6 +13,7 @@ string grid[N];
 vector<pair<int, int>> dir = {{0,1}, {0,-1}, {1,0}, {-1,0}};
 int disCats[N][M];
 int disMouse[N][M];
+pair<int,int> parent[N][M];
 bool isValid(int r , int c , int who[N][M]){
    if(r < 0 || r >= n || c < 0 || c >= m) return false;
    if(grid[r][c] == '#' || who[r][c] != OO) return false;
@@ -43,7 +45,7 @@ void BFSCats() {
         }
     }
 }
-
+pair<int,int> exit_pair;
 bool BFSMouse(pair<int, int> p) {
     memset(disMouse, OO, sizeof disMouse);
     queue<pair<int, int>> q;
@@ -58,8 +60,11 @@ bool BFSMouse(pair<int, int> p) {
         for (auto [dr, dc] : dir) {
             int nr = r + dr, nc = c + dc;
             if (isValid(nr,nc,disMouse) && (disCats[nr][nc] > disMouse[r][c] + 1)) {
-                
-                if (grid[nr][nc] == 'E') return true;
+                parent[nr][nc] = {r,c};
+                if (grid[nr][nc] == 'E'){
+                   exit_pair = {nr,nc};
+                   return true;
+                }
                 
                 disMouse[nr][nc] = disMouse[r][c] + 1;
                 q.push({nr, nc});
@@ -69,10 +74,21 @@ bool BFSMouse(pair<int, int> p) {
     return false;
 }
 
+pair<int, int> mp;
+void printPath(int r , int c){
+   if(r == mp.first && c == mp.second){
+      printf("%d %d\n" ,r,c);
+      return;
+   }
+   
+   printPath(parent[r][c].first , parent[r][c].second);
+
+   printf("%d %d\n" ,r,c);
+
+}
+
 void solve() {
     cin >> n >> m;
-    pair<int, int> mp;
-
     for (int x = 0; x < n; x++) {
         cin >> grid[x];
         for (int c = 0; c < m; c++) {
@@ -92,7 +108,13 @@ void solve() {
     }
     
     cout << "\nMouse can escape? ";
-    cout << (BFSMouse(mp) ? "YES" : "NO") << endl;
+    memset(parent, -1, sizeof parent);
+    if(BFSMouse(mp)){
+      puts("YES");
+      printPath(exit_pair.first,exit_pair.second);
+      
+    }
+    else puts("NO");
 
     cout << "\nMouse Distance Map:\n";
     for (int x = 0; x < n; x++) {
@@ -103,16 +125,22 @@ void solve() {
         cout << endl;
     }
 }
-
 int main() {
-    FastIO;
-    solve();
+   FastIO;
+#ifdef USACO
+   setIO("lineup");
+#endif
+   solve();
+
 }
+
+
 /*
-5 5
-E..E.
+6 5
+.E...
+C..E.
 .C#.#
 .#...
 C.M..
-.....
+....E
 */
