@@ -5,6 +5,7 @@ int N2 =10e6,M=10e6;
 int m,n,u,v;
 vector<int> adj[N2];
 bool vis[N2];
+
 void dfs(int u)
 {
    vis[u]=true;

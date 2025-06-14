@@ -14,6 +14,7 @@ vector<pair<int, int>> dir = {{0,1}, {0,-1}, {1,0}, {-1,0}};
 int disCats[N][M];
 int disMouse[N][M];
 pair<int,int> parent[N][M];
+
 bool isValid(int r , int c , int who[N][M]){
    if(r < 0 || r >= n || c < 0 || c >= m) return false;
    if(grid[r][c] == '#' || who[r][c] != OO) return false;

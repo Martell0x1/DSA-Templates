@@ -213,6 +213,7 @@ const int NOT_VISITED = 0 , IN_PROGRESS = 1 , VISITED = 2;
 int m,n,u,v;
 vector<int> adj[N_];
 int vis[N_];
+
 bool dfs(int u)
 {
    vis[u]=IN_PROGRESS;
